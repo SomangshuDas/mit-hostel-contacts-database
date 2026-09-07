@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>Direct Dial</title>
+<meta name="description" content="Tap to call, message, or save a hostel contact number.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+
+<script>
+  // Sets --app-height to the real, current window.innerHeight in px.
+  // Overrides the 100dvh CSS fallback so the layout is measured against
+  // the actual visible viewport on every browser/in-app webview (this is
+  // what fixes content being pinned to the top instead of centered).
+  (function(){
+    function setAppHeight(){
+      document.documentElement.style.setProperty("--app-height", window.innerHeight + "px")
+    }
+    setAppHeight()
+    window.addEventListener("resize", setAppHeight)
+    window.addEventListener("orientationchange", setAppHeight)
+  })()
+</script>
+
+<link rel="icon" href="assets/icons/favicon.ico" sizes="any">
+<link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+
+<link rel="preload" href="css/style.css" as="style">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main id="screen" class="call-screen">
+
+  <div class="screen-section section-contact">
+    <div class="avatar-wrap">
+      <div class="avatar-ring"></div>
+      <div id="avatar" class="avatar">
+        <img id="avatarImg" class="avatar-img" alt="" draggable="false">
+        <span id="avatarInitials" class="avatar-initials"></span>
+        <svg id="avatarIcon" viewBox="0 0 24 24" class="avatar-fallback-icon"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.4 0-8 2.2-8 5v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1c0-2.8-3.6-5-8-5z"/></svg>
+      </div>
+    </div>
+
+    <h1 id="contactName" class="contact-name">Loading…</h1>
+    <p id="subtitle" class="subtitle">Please wait</p>
+  </div>
+
+  <div class="screen-section section-actions">
+    <div id="controlsGrid" class="controls-grid" hidden>
+      <div class="ctrl-row">
+        <a href="#" id="whatsappBtn" class="ctrl">
+          <span class="ctrl-circle"><svg viewBox="0 0 24 24" class="ctrl-icon"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm5.6 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.2-.3.3-.1.6.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.7 1.6.3.1.5.1.6-.1l.6-.7c.2-.3.4-.2.7-.1l1.7.8c.2.1.4.2.5.3.1.2.1.9-.1 1.6z"/></svg></span>
+          <span class="ctrl-label">WhatsApp</span>
+        </a>
+        <a href="#" id="messageBtn" class="ctrl">
+          <span class="ctrl-circle"><svg viewBox="0 0 24 24" class="ctrl-icon"><path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z"/></svg></span>
+          <span class="ctrl-label">Message</span>
+        </a>
+        <a href="#" id="facetimeBtn" class="ctrl">
+          <span class="ctrl-circle"><svg viewBox="0 0 24 24" class="ctrl-icon"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg></span>
+          <span class="ctrl-label">FaceTime</span>
+        </a>
+      </div>
+
+      <div class="ctrl-row">
+        <button type="button" class="ctrl" id="copyBtn">
+          <span class="ctrl-circle"><svg viewBox="0 0 24 24" class="ctrl-icon"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></span>
+          <span class="ctrl-label">Copy</span>
+        </button>
+        <button type="button" id="contactsBtn" class="ctrl">
+          <span class="ctrl-circle"><svg viewBox="0 0 24 24" class="ctrl-icon"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v2h16v-2c0-3.3-4.7-5-8-5z"/></svg></span>
+          <span class="ctrl-label">Contacts</span>
+        </button>
+        <button type="button" id="shareBtn" class="ctrl">
+          <span class="ctrl-circle"><svg viewBox="0 0 24 24" class="ctrl-icon"><path d="M18 16.1c-.8 0-1.4.3-1.9.8l-7.1-4.1c.1-.3.1-.5.1-.8s0-.5-.1-.8l7-4.1c.5.5 1.2.8 2 .8 1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3c0 .3 0 .5.1.8l-7 4.1c-.5-.5-1.2-.8-2-.8-1.7 0-3 1.3-3 3s1.3 3 3 3c.8 0 1.5-.3 2-.8l7.1 4.2c-.1.2-.1.5-.1.7 0 1.6 1.3 3 3 3s3-1.4 3-3-1.4-3-3-3z"/></svg></span>
+          <span class="ctrl-label">Share</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen-section section-call">
+    <a id="call" class="call-cta" role="button" aria-label="Call" tabindex="0">
+      <svg viewBox="0 0 24 24" class="call-icon">
+        <path d="M6.6 10.8c1.4 2.8 3.7 5.1 6.5 6.5l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V21c0 .6-.4 1-1 1C10.3 22 2 13.7 2 3c0-.6.4-1 1-1h4.6c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.3 2z"/>
+      </svg>
+    </a>
+    <p id="ctaLabel" class="cta-label">Tap to call</p>
+  </div>
+
+</main>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script defer src="js/script.js"></script>
+</body>
+</html>

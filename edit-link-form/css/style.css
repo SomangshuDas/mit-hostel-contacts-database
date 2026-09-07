@@ -1,0 +1,267 @@
+/* Same palette/tokens as the direct-dial screen, so the two feel like one app. */
+:root{
+  --accent:#22c55e;
+  --accent-dark:#16a34a;
+  --danger:#ef4444;
+  --glass:rgba(255,255,255,.14);
+  --glass-active:rgba(255,255,255,.32);
+  --text:#fff;
+  --text-dim:rgba(255,255,255,.6);
+  --text-faint:rgba(255,255,255,.4);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* The dialer disables text selection app-wide since nothing there is
+   selectable text; this screen has a real input, so re-enable it there. */
+body,h1,p,button{
+  user-select:none;
+}
+input{
+  user-select:text;
+}
+
+html,body{
+  height:100%;
+}
+
+body{
+  /* --app-height is set by the inline script in index.html — see the
+     comment there. Overrides 100dvh so this centers correctly on every
+     browser/in-app webview, not just ones with full dvh support. */
+  min-height:100dvh;
+  min-height:var(--app-height, 100dvh);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:#0b0b0c;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.form-screen{
+  position:relative;
+  height:100dvh;
+  height:var(--app-height, 100dvh);
+  width:100%;
+  max-width:520px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:calc(env(safe-area-inset-top) + 6px) 18px calc(env(safe-area-inset-bottom) + 10px);
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(34,197,94,.35), transparent 60%),
+    radial-gradient(120% 60% at 50% 100%, rgba(22,163,74,.25), transparent 60%),
+    linear-gradient(160deg,#1c2b33 0%,#101820 45%,#0a0f14 100%);
+  background-color:#0b0b0c;
+}
+
+@media (min-width:640px){
+  body{ padding:40px; }
+  .form-screen{
+    height:min(100dvh, 880px);
+    height:min(var(--app-height, 100dvh), 880px);
+    border-radius:44px;
+    box-shadow:0 30px 90px rgba(0,0,0,.55);
+    overflow:hidden;
+  }
+}
+
+.form-screen::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  backdrop-filter:blur(40px);
+  background:rgba(0,0,0,.28);
+  z-index:0;
+}
+
+.form-screen > *{
+  position:relative;
+  z-index:1;
+}
+
+/* The card itself — a second, slightly-lifted glass layer on top of the
+   dialer-style background, since a form needs a contained surface a bare
+   call screen doesn't. */
+.glass-card{
+  width:100%;
+  max-width:380px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:16px;
+  padding:36px 26px 30px;
+  border-radius:28px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 20px 60px rgba(0,0,0,.4),inset 0 1px 1px rgba(255,255,255,.08);
+  opacity:0;
+  transform:translateY(16px);
+  animation:cardIn .5s ease forwards;
+}
+
+@keyframes cardIn{
+  to{opacity:1;transform:translateY(0);}
+}
+
+.icon-wrap{
+  position:relative;
+  width:88px;
+  height:88px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:2px;
+}
+
+.icon-ring{
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.35);
+  animation:ringPulse 2.4s ease-out infinite;
+}
+
+@keyframes ringPulse{
+  0%{transform:scale(.92);opacity:.9;}
+  75%{transform:scale(1.28);opacity:0;}
+  100%{transform:scale(1.28);opacity:0;}
+}
+
+.icon-circle{
+  width:72px;
+  height:72px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(155deg,#3fdc84,var(--accent-dark));
+  box-shadow:0 8px 30px rgba(0,0,0,.4),inset 0 1px 1px rgba(255,255,255,.25);
+}
+
+.icon-glyph{
+  width:32px;
+  height:32px;
+  fill:#0c1a12;
+}
+
+.title{
+  font-size:22px;
+  font-weight:600;
+  letter-spacing:.2px;
+  line-height:1.25;
+}
+
+.subtitle{
+  font-size:14.5px;
+  font-weight:400;
+  line-height:1.45;
+  color:var(--text-dim);
+  max-width:280px;
+}
+
+.field{
+  width:100%;
+  margin-top:6px;
+}
+
+input[type="email"]{
+  width:100%;
+  padding:15px 16px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.14);
+  background:var(--glass);
+  color:var(--text);
+  font-size:16px;
+  font-family:inherit;
+  transition:border-color .2s ease,background .2s ease,box-shadow .2s ease;
+}
+
+input[type="email"]::placeholder{
+  color:var(--text-faint);
+}
+
+input[type="email"]:focus{
+  outline:none;
+  border-color:var(--accent);
+  background:var(--glass-active);
+  box-shadow:0 0 0 4px rgba(34,197,94,.18);
+}
+
+.submit-btn{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(155deg,#3fdc84,var(--accent-dark));
+  color:#062012;
+  font-family:inherit;
+  font-size:16px;
+  font-weight:700;
+  letter-spacing:.2px;
+  cursor:pointer;
+  box-shadow:0 10px 30px rgba(34,197,94,.4);
+  transition:transform .18s cubic-bezier(.2,.9,.3,1.25);
+}
+
+.submit-btn:active{
+  transform:scale(.96);
+}
+
+.submit-btn:focus-visible{
+  outline:2px solid #fff;
+  outline-offset:3px;
+}
+
+/* #message (not .form-message) is used here on purpose — script.js
+   overwrites the element's className wholesale ("error" / "success" / ""),
+   so any class only in the HTML would get wiped on the first submit.
+   Styling off the id keeps the layout stable across all three states. */
+#message{
+  min-height:1.3em;
+  font-size:14px;
+  font-weight:500;
+  text-align:center;
+  color:var(--text-dim);
+  transition:opacity .3s ease;
+}
+
+#message.error{
+  color:#ffb4b4;
+}
+
+#message.success{
+  color:#9df5c5;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .icon-ring{
+    animation:none !important;
+  }
+  .glass-card{
+    animation:none !important;
+    opacity:1;
+    transform:none;
+  }
+}
+
+@media (max-height:640px){
+  .glass-card{padding:26px 22px 22px;gap:12px;}
+  .icon-wrap{width:72px;height:72px;}
+  .icon-circle{width:60px;height:60px;}
+  .icon-glyph{width:26px;height:26px;}
+}
+
+@media(max-width:480px){
+  .glass-card{padding:30px 20px 26px;}
+}

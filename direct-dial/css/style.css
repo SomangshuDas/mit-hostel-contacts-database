@@ -1,0 +1,372 @@
+:root{
+  --accent:#22c55e;
+  --accent-dark:#16a34a;
+  --danger:#ef4444;
+  --glass:rgba(255,255,255,.14);
+  --glass-active:rgba(255,255,255,.32);
+  --text:#fff;
+  --text-dim:rgba(255,255,255,.6);
+  --text-faint:rgba(255,255,255,.4);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+
+html,body{
+  height:100%;
+}
+
+body{
+  /* --app-height is set by a tiny inline script (window.innerHeight, in px).
+     It overrides 100dvh below once JS runs, which fixes browsers/in-app
+     webviews (WhatsApp, SMS, older Android WebView, etc.) that either
+     don't support dvh or report it incorrectly — the #1 cause of content
+     appearing pinned to the top instead of vertically centered. */
+  min-height:100dvh;
+  min-height:var(--app-height, 100dvh);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:#0b0b0c;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.call-screen{
+  position:relative;
+  height:100dvh;
+  height:var(--app-height, 100dvh);
+  width:100%;
+  max-width:520px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  /* Centers the 3 sections as one block; if they don't fill the full
+     height, the leftover space is split evenly above/below instead of
+     the block sticking to the top. */
+  justify-content:center;
+  /* Single gap value = equal space between all 3 sections, and it scales
+     with viewport height so it stays balanced on short/tall phones. */
+  gap:clamp(18px, 4.5vh, 42px);
+  padding:calc(env(safe-area-inset-top) + 6px) 18px calc(env(safe-area-inset-bottom) + 10px);
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(34,197,94,.35), transparent 60%),
+    radial-gradient(120% 60% at 50% 100%, rgba(22,163,74,.25), transparent 60%),
+    linear-gradient(160deg,#1c2b33 0%,#101820 45%,#0a0f14 100%);
+  background-color:#0b0b0c;
+}
+
+@media (min-width:640px){
+  body{ padding:40px; }
+  .call-screen{
+    height:min(100dvh, 880px);
+    height:min(var(--app-height, 100dvh), 880px);
+    border-radius:44px;
+    box-shadow:0 30px 90px rgba(0,0,0,.55);
+    overflow:hidden;
+  }
+}
+
+.call-screen::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  backdrop-filter:blur(40px);
+  background:rgba(0,0,0,.28);
+  z-index:0;
+}
+
+.call-screen > *{
+  position:relative;
+  z-index:1;
+}
+
+.screen-section{
+  /* No flex:1 / stretch here on purpose — sections size to their own
+     content, and the equal `gap` on .call-screen (above) does the job of
+     spacing them apart evenly. */
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.section-contact{
+  text-align:center;
+  gap:14px;
+  padding:0 8px;
+}
+
+.section-call{
+  gap:10px;
+}
+
+.avatar-wrap{
+  position:relative;
+  width:132px;
+  height:132px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:6px;
+}
+
+.avatar-ring{
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.35);
+  animation:ringPulse 2.4s ease-out infinite;
+}
+
+@keyframes ringPulse{
+  0%{transform:scale(.92);opacity:.9;}
+  75%{transform:scale(1.28);opacity:0;}
+  100%{transform:scale(1.28);opacity:0;}
+}
+
+.avatar{
+  position:relative;
+  width:112px;
+  height:112px;
+  border-radius:50%;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(155deg,#3fdc84,var(--accent-dark));
+  box-shadow:0 8px 30px rgba(0,0,0,.4),inset 0 1px 1px rgba(255,255,255,.25);
+  font-size:42px;
+  font-weight:600;
+  letter-spacing:1px;
+  color:#0c1a12;
+}
+
+.avatar-img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition:opacity .35s ease;
+}
+
+.avatar-initials{
+  position:relative;
+  z-index:1;
+  display:none;
+  line-height:1;
+}
+
+.avatar-fallback-icon{
+  position:relative;
+  z-index:1;
+  width:52px;
+  height:52px;
+  fill:rgba(12,26,18,.85);
+}
+
+.avatar.has-name .avatar-initials{ display:block; }
+.avatar.has-name .avatar-fallback-icon{ display:none; }
+
+.avatar.has-image .avatar-img{ opacity:1; }
+.avatar.has-image .avatar-initials,
+.avatar.has-image .avatar-fallback-icon{ opacity:0; }
+
+.contact-name{
+  font-size:26px;
+  font-weight:600;
+  letter-spacing:.2px;
+  max-width:100%;
+  overflow-wrap:break-word;
+  line-height:1.2;
+}
+
+.subtitle{
+  font-size:16px;
+  font-weight:400;
+  color:var(--text-dim);
+  animation:subtitlePulse 1.8s ease-in-out infinite;
+  white-space:nowrap;
+  overflow-x:auto;
+  max-width:100%;
+  scrollbar-width:none;
+}
+.subtitle::-webkit-scrollbar{display:none;}
+
+@keyframes subtitlePulse{
+  0%,100%{opacity:.55;}
+  50%{opacity:1;}
+}
+
+.subtitle.error{
+  color:#ffb4b4;
+  animation:none;
+  opacity:1;
+}
+
+/* controls: row 1 = ways to reach the contact, row 2 = things to do with the number */
+.controls-grid{
+  width:100%;
+  max-width:340px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:26px;
+}
+
+.ctrl-row{
+  width:100%;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+}
+
+.ctrl{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:7px;
+  background:none;
+  border:none;
+  color:var(--text);
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.ctrl-circle{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--glass);
+  transition:background .15s ease,transform .15s ease;
+}
+
+.ctrl:active .ctrl-circle{
+  transform:scale(.9);
+}
+
+.ctrl-icon{
+  width:26px;
+  height:26px;
+  fill:#fff;
+}
+
+.ctrl-label{
+  font-size:12px;
+  color:var(--text-dim);
+  font-weight:500;
+}
+
+.call-cta{
+  width:78px;
+  height:78px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--accent);
+  color:#fff;
+  text-decoration:none;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(34,197,94,.4);
+  transition:transform .18s cubic-bezier(.2,.9,.3,1.25);
+  cursor:pointer;
+}
+
+.call-cta:active{
+  transform:scale(.85);
+}
+
+.call-icon{
+  width:32px;
+  height:32px;
+  fill:#fff;
+}
+
+.cta-label{
+  font-size:13px;
+  color:var(--text-faint);
+  font-weight:500;
+  letter-spacing:.2px;
+}
+
+.ripple{
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,.4);
+  transform:scale(0);
+  animation:ripple 600ms linear;
+  pointer-events:none;
+}
+
+@keyframes ripple{
+  to{transform:scale(4);opacity:0;}
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:14%;
+  transform:translate(-50%,20px);
+  background:rgba(255,255,255,.95);
+  color:#0b0b0c;
+  padding:10px 18px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:600;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease,transform .25s ease;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+  z-index:5;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+.call-cta:focus-visible,
+.ctrl:focus-visible .ctrl-circle{
+  outline:2px solid #fff;
+  outline-offset:3px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .avatar-ring,
+  .subtitle{
+    animation:none !important;
+  }
+  .subtitle{opacity:.85;}
+}
+
+@media (max-height:640px){
+  .call-screen{gap:clamp(12px, 3vh, 24px);}
+  .avatar-wrap{width:104px;height:104px;}
+  .avatar{width:88px;height:88px;font-size:34px;}
+  .controls-grid{gap:16px;}
+  .ctrl-row{gap:10px;}
+  .ctrl-circle{width:52px;height:52px;}
+  .call-cta{width:70px;height:70px;}
+}
+
+@media (min-width:420px){
+  .call-cta{width:86px;height:86px;}
+  .call-icon{width:36px;height:36px;}
+}

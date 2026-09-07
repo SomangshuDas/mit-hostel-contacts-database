@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>Retrieve Your Edit Link</title>
+<meta name="description" content="Retrieve the edit link for your hostel contact entry.">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+
+<script>
+  // Sets --app-height to the real, current window.innerHeight in px.
+  // Overrides the 100dvh CSS fallback so the layout is measured against
+  // the actual visible viewport on every browser/in-app webview — same
+  // fix used on the direct-dial screen, keeps this centered too.
+  (function(){
+    function setAppHeight(){
+      document.documentElement.style.setProperty("--app-height", window.innerHeight + "px")
+    }
+    setAppHeight()
+    window.addEventListener("resize", setAppHeight)
+    window.addEventListener("orientationchange", setAppHeight)
+  })()
+</script>
+
+<link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon">
+<link rel="preload" href="css/style.css" as="style">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main id="screen" class="form-screen">
+
+  <div class="glass-card">
+
+    <div class="icon-wrap">
+      <div class="icon-ring"></div>
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24" class="icon-glyph"><path d="M3.9 12a5 5 0 0 1 5-5h3v2h-3a3 3 0 0 0 0 6h3v2h-3a5 5 0 0 1-5-5zm7-1h6v2h-6v-2zm3-4h3a5 5 0 0 1 0 10h-3v-2h3a3 3 0 0 0 0-6h-3V7z"/></svg>
+      </div>
+    </div>
+
+    <h1 class="title">Retrieve Your Edit Link</h1>
+    <p class="subtitle">Enter the email address registered in the database</p>
+
+    <div class="field">
+      <input type="email" id="email" placeholder="your@email.com" required>
+    </div>
+
+    <button type="button" class="submit-btn" onclick="submitEmail()">
+      <span class="submit-label">Get Link</span>
+    </button>
+
+    <p id="message"></p>
+
+  </div>
+
+</main>
+
+<script defer src="js/script.js"></script>
+</body>
+</html>
